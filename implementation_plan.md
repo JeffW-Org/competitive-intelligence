@@ -1,32 +1,108 @@
 # Competitive Intelligence Product - Implementation Plan
 
 ## MVP Scope
-**Core Value:** Automated system analyzing competitor job listings + financial filings (SEC/EDGAR, ASX) to predict strategic moves.
+**Core Value:** A web app that analyzes competitor job listings + financial filings to produce a structured intelligence briefing predicting strategic moves.
 
-### MVP Features (Phase 1)
-1. **Competitor Tracking** - Store list of target companies
-2. **Job Listing Monitor** - Scrape/collect job postings from career pages
-3. **Financial Filing Watcher** - Pull recent SEC/EDGAR and ASX announcements
-4. **Analysis Engine** - Apply the 5-part framework:
-   - Initiative Mapping
-   - Unreleased Bets
-   - Priority Signals
-   - Risk-Investment Alignment
-   - Strategic Predictions
-5. **Report Generator** - Output "Competitor Strategy Radar" reports
+---
 
-### Out of Scope (for now)
-- Automated scheduling/scraping pipelines
-- User dashboards
-- Payments/subscriptions
+## User Flow (MVP)
+
+### Step 1: Company Setup
+- [ ] Company name input (text field)
+- [ ] Listing market selector (ASX or US/SEC)
+- [ ] Optional context field (free-text for user context)
+
+### Step 2: Data Input
+- [ ] **Job Listings Panel** - Paste text OR upload file (.csv, .json, .txt, .pdf)
+- [ ] **Financial Filings Panel** - Upload documents (.pdf, .txt, .html)
+  - [ ] Filing type dropdown per file (10-K, 10-Q, 8-K, etc. for US; Annual Report, Half-Year, 4C, etc. for ASX)
+  - [ ] Support multiple files
+
+### Step 3: Analysis Generation
+- [ ] "Generate Briefing" button
+- [ ] Progress indicator (30-60 sec)
+- [ ] Call Claude API with structured system prompt
+
+### Step 4: Report Output
+- [ ] Structured report display
+- [ ] Collapsible sections
+- [ ] Export: copy to clipboard, download as .md
+- [ ] Confidence badges (High/Medium/Low with colors)
+
+---
+
+## Analysis Engine (System Prompt)
+
+### Filing-Aware Routing
+**US-listed focus:**
+- 10-K Item 1 (Business), Item 1A (Risks), Item 7 (MD&A)
+- 10-Q MD&A (fresh language shifts)
+- 8-K (material events, last 90 days)
+- DEF 14A (Proxy - exec compensation)
+
+**ASX-listed focus:**
+- Annual Report → OFR, Directors' Report, CEO/Chair Letters
+- Half-Year Report → Directors' Report and OFR
+- Quarterly 4C Section 6 (cash flow narrative)
+- ASX Announcements (last 90 days)
+- Investor Presentations
+
+### 5 Analysis Lenses
+1. **Initiative Mapping** - Cluster roles by inferred initiative, assess maturity
+2. **Unreleased Bets** - Jobs without filing mentions = unannounced bets
+3. **Priority Signals** - Seniority spikes, C-suite reporting, urgent language
+4. **Risk-Investment Alignment** - Cross-ref stated risks with hiring
+5. **Strategic Predictions** - 3 predictions for next 6-12 months with confidence
+
+### Output Structure
+```
+COMPANY NAME — Month Year
+EXECUTIVE SUMMARY
+INITIATIVE MAP (table)
+UNRELEASED BETS (numbered)
+PRIORITY SIGNALS (numbered)
+RISK-INVESTMENT GAPS (table)
+STRATEGIC PREDICTIONS (numbered + confidence)
+METHODOLOGY NOTE
+```
+
+---
+
+## Tech Stack (MVP)
+- **Frontend:** React (single page app)
+- **File handling:** Client-side PDF text extraction (pdf.js)
+- **State:** Local state only (no backend, no auth)
+- **Export:** Markdown copy-to-clipboard
+- **Styling:** Dark mode, monospace typography, Bloomberg-terminal aesthetic
+
+---
+
+## Out of Scope
+- Auto-fetching from careers pages / EDGAR / ASX
+- Saved analyses / history
+- Multi-company comparison
+- User accounts / auth
+- Scheduling / alerts
 
 ---
 
 ## Progress
 
-- [ ] Repo initialized
-- [ ] MVP scope defined (this file)
-- [ ] **NEXT:** Awaiting brief from Jeff
+- [x] Repo initialized
+- [x] MVP scope defined
+- [x] Brief received
+- [ ] Set up React project with Vite
+- [ ] Build Company Setup form
+- [ ] Build Job Listings input panel
+- [ ] Build Financial Filings input panel with dropdowns
+- [ ] Implement PDF text extraction
+- [ ] Create Claude API integration
+- [ ] Build Analysis Engine system prompt
+- [ ] Build Report output with collapsible sections
+- [ ] Add export functionality (clipboard + .md)
+- [ ] Style: dark mode, monospace, confidence badges
+- [ ] Deploy to Vercel
+- [ ] Test end-to-end flow
 
 ---
 
